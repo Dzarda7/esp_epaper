@@ -1,0 +1,2 @@
+[codespell]
+skip = ./build,./dist,./managed_components,./.git,./examples/*/build,./examples/*/managed_components

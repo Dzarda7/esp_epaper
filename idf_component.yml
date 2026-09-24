@@ -1,0 +1,37 @@
+---
+version: 0.1.0
+description: >-
+  Generic e-paper (e-ink) panel driver for ESP-IDF, exposed through the standard
+  esp_lcd panel interface. Adding a display is one descriptor, adding a
+  controller family is one file. Ships SSD1680 support and the 2.9" GDEY029T94
+  panel, with full and fast partial refresh.
+url: https://github.com/Dzarda7/esp_epaper
+repository: https://github.com/Dzarda7/esp_epaper.git
+documentation: https://github.com/Dzarda7/esp_epaper/blob/main/README.md
+issues: https://github.com/Dzarda7/esp_epaper/issues
+license: MIT
+tags: [display, epaper, eink, esp_lcd, ssd1680, lvgl]
+dependencies:
+  # Developed and tested against v6.x. The driver has no target-specific code,
+  # so the constraint is the IDF API surface, not the chip.
+  idf: '>=6.0'
+examples:
+  - path: examples/epaper_demo
+  - path: examples/epaper_lvgl
+files:
+  exclude:
+    - '**/build/**'
+    - '**/managed_components/**'
+    - '**/sdkconfig'
+    - '**/sdkconfig.old'
+    - '**/dependencies.lock'
+    - .cache/**
+    # Development tooling, of no use to a consumer of the component.
+    - .pre-commit-config.yaml
+    - .clang-format
+    - .check_copyright_config.yaml
+    - .codespellrc
+    - .cz.toml
+    - CONTRIBUTING.md
+    - .changelog-template.md.j2
+    - .github/**

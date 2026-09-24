@@ -1,0 +1,51 @@
+---
+name: Upload component to the component registry
+on:
+  push:
+    tags: [v*]
+jobs:
+  upload_component:
+    runs-on: ubuntu-latest
+    permissions:
+      # Mints the short-lived OIDC token the registry trusts. Naming any
+      # permission drops the rest to none, so the others are listed explicitly.
+      id-token: write
+      # Needed to create the GitHub Release.
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract release notes for this tag from the CHANGELOG
+        run: |
+          # The heading is "## [v1.2.3](url) (date)" when the changelog
+          # template links it, or "## v1.2.3 (date)" when it does not. index()
+          # matches literally, so a version's dots cannot act as wildcards.
+          awk -v tag="${GITHUB_REF_NAME}" '
+            index($0, "## [" tag "]") == 1 || index($0, "## " tag " ") == 1 {
+              flag = 1
+              next
+            }
+            /^## / { flag = 0 }
+            flag
+          ' CHANGELOG.md > release_notes.md
+          if [ ! -s release_notes.md ]; then
+            echo "::error::No '## ${GITHUB_REF_NAME}' section in CHANGELOG.md."
+            echo "::error::Was this tag created by 'cz bump'?"
+            exit 1
+          fi
+          cat release_notes.md
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "${GITHUB_REF_NAME}" \
+            --notes-file release_notes.md
+      - name: Upload component to the component registry
+        uses: espressif/upload-components-ci-action@v2
+        with:
+          namespace: dzarda7
+          # No api_token: the action falls back to OIDC, which needs this
+          # repository listed as a trusted uploader for the component.
+          # The version comes from idf_component.yml, which cz bump keeps
+          # in step with the tag.
+          components: 'esp_epaper: .'

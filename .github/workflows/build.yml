@@ -1,0 +1,33 @@
+---
+name: Build
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  lint:
+    name: pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: pre-commit/action@v3.0.1
+  build:
+    name: ${{ matrix.example }} on ESP-IDF ${{ matrix.idf }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        example: [epaper_demo, epaper_lvgl]
+        # v6.0 is the floor the manifest declares, so build against it rather
+        # than against latest - a green run is what makes that claim true.
+        idf: [v6.0]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: espressif/esp-idf-ci-action@v1.2.0
+        with:
+          esp_idf_version: ${{ matrix.idf }}
+          target: esp32
+          path: examples/${{ matrix.example }}

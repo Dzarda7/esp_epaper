@@ -1,0 +1,10 @@
+idf_component_register(SRCS "src/esp_lcd_epaper.c"
+                            "src/epd_hal.c"
+                            "src/controllers/ssd1680.c"
+                            "src/panels/gdey029t94.c"
+                            "src/panels/gdey0213b74.c"
+                            "src/panels/gdeh0154d67.c"
+                       INCLUDE_DIRS "include"
+                       PRIV_INCLUDE_DIRS "priv_include" "src/controllers"
+                       REQUIRES "esp_lcd"
+                       PRIV_REQUIRES "esp_driver_gpio" "esp_timer")

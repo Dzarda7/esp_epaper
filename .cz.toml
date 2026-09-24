@@ -1,0 +1,22 @@
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "0.1.0"
+version_files = ["idf_component.yml:^version"]
+tag_format = "v$version"
+major_version_zero = true
+update_changelog_on_bump = true
+changelog_incremental = true
+template = ".changelog-template.md.j2"
+# Sections of the generated CHANGELOG, in order. Types absent from the map
+# below (docs, ci, build, chore, test, style) never reach the changelog.
+change_type_order = ["BREAKING CHANGE", "Features", "Bug Fixes", "Refactors"]
+
+# Tables must come last: any key after one belongs to it, not to the section
+# above. change_type_order landing inside extras silently disabled it.
+[tool.commitizen.change_type_map]
+feat = "Features"
+fix = "Bug Fixes"
+refactor = "Refactors"
+
+[tool.commitizen.extras]
+repo_url = "https://github.com/Dzarda7/esp_epaper"

@@ -1,0 +1,20 @@
+# Changelog
+{% for entry in tree %}
+
+## [{{ entry.version }}]({{ repo_url }}/releases/tag/{{ entry.version }}){% if entry.date %} ({{ entry.date }}){% endif %}
+
+{% for change_key, changes in entry.changes.items() %}
+{% if change_key %}
+{{ "\n### " ~ change_key }}
+{% endif %}
+
+{% for change in changes %}
+{%- set link = " ([" ~ change.sha1[:7] ~ "](" ~ repo_url ~ "/commit/" ~ change.sha1 ~ "))" if change.sha1 else "" %}
+{% if change.scope %}
+- **{{ change.scope }}**: {{ change.message }}{{ link }}
+{% elif change.message %}
+- {{ change.message }}{{ link }}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endfor %}

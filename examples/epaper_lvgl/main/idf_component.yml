@@ -1,0 +1,6 @@
+---
+dependencies:
+  dzarda7/esp_epaper:
+    version: ^0.1.0
+    override_path: ../../..
+  lvgl/lvgl: ^9.3.0
